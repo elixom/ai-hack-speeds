@@ -82,13 +82,14 @@ class AttendanceController extends Controller
         $existingRecord = AttendanceRecord::where('user_id', $user->id)
             ->where('squad_id', $request->squad_id)
             ->whereDate('date', $today)
+            ->where('check_out_time', null)
             ->first();
 
         if ($existingRecord) {
             return response()->json([
                 'success' => false,
                 'message' => 'Already checked in today for this squad'
-            ], 422);
+            ], 400);
         }
 
         // Get active sprint for the squad
@@ -257,7 +258,8 @@ class AttendanceController extends Controller
         $attendance = AttendanceRecord::where('user_id', $request->user()->id)
             ->whereDate('date', now()->toDateString())
             ->with(['squad', 'sprint'])
-            ->get();
+            ->latest()
+            ->first();
 
         return response()->json([
             'success' => true,

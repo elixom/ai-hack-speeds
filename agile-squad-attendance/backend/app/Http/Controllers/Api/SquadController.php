@@ -15,7 +15,9 @@ class SquadController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Squad::with(['members']);
+        $query = Squad::with(['members', 'sprints' => function ($q) {
+            $q->where('status', 'active');
+        }]);
 
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');

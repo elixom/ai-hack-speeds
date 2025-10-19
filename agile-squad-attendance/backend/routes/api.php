@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LeaveRequestController;
 use App\Http\Controllers\Api\SquadController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,17 +56,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/squads/{id}/active-sprint', [SquadController::class, 'activeSprint']);
 
     // Attendance routes
-    Route::apiResource('attendance', AttendanceController::class);
     Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn']);
     Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut']);
     Route::get('/attendance/today', [AttendanceController::class, 'today']);
     Route::get('/attendance/squad/{squadId}/today', [AttendanceController::class, 'squadToday']);
     Route::get('/attendance/stats', [AttendanceController::class, 'stats']);
+    Route::apiResource('attendance', AttendanceController::class);
 
     // Leave request routes
-    Route::apiResource('leave-requests', LeaveRequestController::class);
     Route::post('/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve']);
     Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject']);
     Route::get('/leave-requests/pending-approvals', [LeaveRequestController::class, 'pendingApprovals']);
     Route::get('/leave-requests/calendar', [LeaveRequestController::class, 'calendar']);
+    Route::apiResource('leave-requests', LeaveRequestController::class);
+
+    // User management routes (Admin only)
+    Route::apiResource('users', UserController::class);
+    Route::patch('/users/{id}/status', [UserController::class, 'toggleStatus']);
+
+    // Audit log routes
+    Route::get('/audit-logs', [UserController::class, 'auditLogs']);
 });

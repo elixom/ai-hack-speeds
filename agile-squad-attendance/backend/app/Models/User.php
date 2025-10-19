@@ -70,6 +70,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the squad member records for this user.
+     */
+    public function squadMembers(): HasMany
+    {
+        return $this->hasMany(SquadMember::class);
+    }
+
+    /**
      * Get the attendance records for this user.
      */
     public function attendanceRecords(): HasMany

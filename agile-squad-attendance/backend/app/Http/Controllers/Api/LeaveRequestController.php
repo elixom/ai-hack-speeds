@@ -63,7 +63,7 @@ class LeaveRequestController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'squad_id' => 'required|exists:squads,id',
+            'squad_id' => 'nullable|exists:squads,id',
             'leave_type' => 'required|in:vacation,sick,public_holiday,training,other',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
